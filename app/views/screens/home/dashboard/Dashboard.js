@@ -1,4 +1,11 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  BackHandler,
+  Alert,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {FlatList} from 'react-native';
 import ButtonView from '../../../components/ButtonView';
@@ -75,7 +82,6 @@ const Dashboard = props => {
           _list[index].isRemoved = true;
           _list[previousItemIndex].isRemoved = true;
           _list.forEach(it => (it.isVisible = false));
-          
         }, 500);
       } else {
         setTimeout(() => {
@@ -96,6 +102,13 @@ const Dashboard = props => {
   const _onRestart = () => {
     setList(shuffleArray);
     setCount(0);
+  };
+
+  const _onExitApp = () => {
+    Alert.alert('Memory Game', 'Are you sure you want to exit?', [
+      {text: 'Yes', onPress: () => BackHandler.exitApp()},
+      {text: 'Cancel', onPress: () => {}},
+    ]);
   };
 
   return (
@@ -119,7 +132,11 @@ const Dashboard = props => {
           />
         </View>
         <View style={styles.row}>
-          <ButtonView title={'Exit'} buttonStyle={{width: 120}} />
+          <ButtonView
+            title={'Exit'}
+            buttonStyle={{width: 120}}
+            onPress={() => _onExitApp()}
+          />
           <ButtonView
             title={'Restart'}
             buttonStyle={{width: 120}}
